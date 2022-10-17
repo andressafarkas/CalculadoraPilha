@@ -3,10 +3,10 @@ import java.util.EmptyStackException;
 public class Pilha {
 
     private class Node {
-        public char element;
+        public String element;
         public Node next;
 
-        public Node(char element) {
+        public Node(String element) {
             this.element = element;
             next = null;
         }
@@ -20,24 +20,24 @@ public class Pilha {
         count = 0;
     }
 
-       public void push (char e){
+    public void push (String e){
         Node aux = new Node(e);
         aux.next = topo;
         topo = aux;
         count ++;
     }
 
-    public char pop(){
+    public String pop(){
         if(count == 0){
             throw new EmptyStackException();
         }
         count --;
-        char aux = topo.element;
+        String aux = topo.element;
         topo = topo.next;
         return aux;
     }
 
-    public char top() {
+    public String top() {
         if(isEmpty()){
             throw new EmptyStackException();
         }
