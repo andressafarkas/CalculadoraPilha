@@ -4,6 +4,8 @@ import javax.sound.sampled.SourceDataLine;
 
 public class Calculadora {
 
+    Pilha p = new Pilha();
+
     public double Res_parcial(double a, double b, String operacao){
         double res = 0;
         if(operacao.equals("+")){
@@ -14,81 +16,90 @@ public class Calculadora {
             res = a * b;
         }else  if(operacao.equals("/")){
             res = a / b;
-        } if(operacao.equals("^")){
+        }else if(operacao.equals("^")){
             res = Math.pow(a, b);
         }else{
-            System.out.println("Erro de sintaxe encontrado. Operação matemática inválida!");
+            System.out.println("Erro de Sintaxe encontrado. Expressão lógica não encontrada!");
         }
         return res;
     }
 
-    Pilha p = new Pilha();
-
-    public double Calcula(ArrayList l){
-        Pilha aux = new Pilha();
-        int tam = l.size();
-        int tam_aux = aux.size();
-        double resposta;
+    public String Calcula(ArrayList l){
+        int tam_max = 0;
+        double resposta = 0;
+        double operandoA;
         String operacao;
+        double operandoB;
 
-        for (int i = 0; i < tam; i++) {  // adiciona a expressao na fila
-            p.push((String)l.get(i));
-        }
-
-        while (p.size() != 1){  // enquanto o tam da fila for diferente de 1
-            if (p.top().equals("}")){
-                aux.push(p.pop()); // adiciona } na fila aux
-                if(p.top().equals("]")){
-                    aux.push(p.pop());  // adiciona ] na fila auxiliar
-                }else if (p.top().equals(")")){ // adiciona ) na fila auxiliar
-                    aux.pop(); // remove o ultimo ')'
-                    int a = Integer.parseInt(p.pop());
-                    operacao = p.pop();
-                    int b = Integer.parseInt(p.pop());
-                    resposta = Res_parcial(a, b, operacao);
-                    p.pop();  // remove o caracter de abertura
-                    p.push(Double.toString(resposta));  // adiciona o resultado parcial na fila auxiliar
+        // enquanto for diferente de "fecha", adiciona na fila
+            for (int i = 0; i < l.size(); i++) {
+                if(!l.get(i).equals(")") || !l.get(i).equals("]") || !l.get(i).equals("}")){
+                    p.push((String) l.get(i));
                 }
-                
-                for (int i = 0; i < tam_aux; i++) {
-                    p.push(aux.pop());  // retorna os elementos pra pilha principal com o resultado calculado
-                } 
-
-            }else if (p.top().equals("]")){
-                aux.push(p.pop()); // adiciona ] na fila aux
-                if(p.top().equals(")")){
-                    aux.push(p.pop());  // adiciona ) na fila auxiliar
-                }else{
-                    aux.pop(); // remove o ultimo ')'
-                    int a = Integer.parseInt(p.pop());
-                    operacao = p.pop();
-                    int b = Integer.parseInt(p.pop());
-                    resposta = Res_parcial(a, b, operacao);
-                    p.pop();  // remove o caracter de abertura
-                    p.push(Double.toString(resposta));  // adiciona o resultado parcial na fila auxiliar
-                }
-                for (int i = 0; i < tam_aux; i++) {
-                    p.push(aux.pop());  // retorna os elementos pra pilha principal com o resultado calculado
-                } 
-
-            }else if(p.top().equals(")")){
-                p.pop();  // remove ) 
-                int a = Integer.parseInt(p.pop());
-                operacao = p.pop();
-                int b = Integer.parseInt(p.pop());
-                resposta = Res_parcial(a, b, operacao);
-                p.pop();  // remove o caracter de abertura
-                p.push(Double.toString(resposta));
-
-            }else{
-                if (p.size() != 1){  // se o tamanho da pilha for diferente de 1
-                    System.out.println("Erro de sintaxe encontrado!");
-                    break;
-                }else{
-                    return Double.parseDouble(p.top());
+                if(l.get(i + 1).equals(")")){
+                    l.remove(i + 1); // remove do array o caracter de fecha
+                    String b = p.pop();
+                    String op = p.pop();
+                    String a = p.pop();
+                    if(p.top().equals("(")){
+                        p.pop();  // remove o caracter de abre
+                        operandoB = Double.parseDouble(b);
+                        operacao = op;
+                        operandoA = Double.parseDouble(a);
+                        resposta = Res_parcial(operandoA, operandoB, operacao);
+                        p.push(Double.toString(resposta));
+                        if(tam_max < p.size()){
+                            tam_max = p.size();
+                        }
+                    }else{
+                        System.out.println("1 - Erro de sintaxe encontrado. Pares de definição de prioridades incorretos!");
+                        break;
+                    }
+                }if(l.get(i + 1).equals("]")){
+                    l.remove(i + 1);
+                    String b = p.pop();
+                    String op = p.pop();
+                    String a = p.pop();
+                    if(p.top().equals("[")){
+                        p.pop();  // remove o caracter de abre
+                        operandoB = Double.parseDouble(b);
+                        operacao = op;
+                        operandoA = Double.parseDouble(a);
+                        resposta = Res_parcial(operandoA, operandoB, operacao);
+                        p.push(Double.toString(resposta));
+                        if(tam_max < p.size()){
+                            tam_max = p.size();
+                        }
+                    }else{
+                        System.out.println("2 - Erro de sintaxe encontrado. Pares de definição de prioridades incorretos!");
+                        break;
+                    } 
+                }if (l.get(i + 1).equals("}")){
+                    l.remove(i + 1);
+                    String b = p.pop();
+                    String op = p.pop();
+                    String a = p.pop();
+                    if(p.top().equals("{")){
+                        p.pop();  // remove o caracter de abre
+                        operandoB = Double.parseDouble(b);
+                        operacao = op;
+                        operandoA = Double.parseDouble(a);
+                        resposta = Res_parcial(operandoA, operandoB, operacao);
+                        p.push(Double.toString(resposta));
+                        if(tam_max < p.size()){
+                            tam_max = p.size();
+                        }
+                    }else{
+                        System.out.println("3 - Erro de sintaxe encontrado. Pares de definição de prioridades incorretos!");
+                        break;
+                    }
                 }
             }
-        }
-        return Double.parseDouble(p.top());
+            String resultado2 = ("Resposta: " + p.top());
+            String resultado3 = (" Tamanho máximo da pilha: " + tam_max);
+
+        return (resultado2 + resultado3);
+             
     }
 }
+
