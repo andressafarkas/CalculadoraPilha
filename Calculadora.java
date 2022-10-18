@@ -1,10 +1,7 @@
 import java.util.ArrayList;
 
-import javax.sound.sampled.SourceDataLine;
-
 public class Calculadora {
 
-    Pilha p = new Pilha();
 
     public double Res_parcial(double a, double b, String operacao){
         double res = 0;
@@ -25,19 +22,24 @@ public class Calculadora {
     }
 
     public String Calcula(ArrayList l){
+        Pilha p = new Pilha();
+
         int tam_max = 0;
         double resposta = 0;
         double operandoA;
         String operacao;
         double operandoB;
 
+        // for (int i = 0; l.size() != 0; i++ ) {
+
+        // }
         // enquanto for diferente de "fecha", adiciona na fila
             for (int i = 0; i < l.size(); i++) {
-                if(!l.get(i).equals(")") || !l.get(i).equals("]") || !l.get(i).equals("}")){
+                if(!l.get(i).equals(")") && !l.get(i).equals("]") && !l.get(i).equals("}")){
                     p.push((String) l.get(i));
-                }
-                if(l.get(i + 1).equals(")")){
-                    l.remove(i + 1); // remove do array o caracter de fecha
+
+                }else if(l.get(i).equals(")")){
+                    //l.remove(i + 1); // remove do array o caracter de fecha
                     String b = p.pop();
                     String op = p.pop();
                     String a = p.pop();
@@ -52,11 +54,10 @@ public class Calculadora {
                             tam_max = p.size();
                         }
                     }else{
-                        System.out.println("1 - Erro de sintaxe encontrado. Pares de definição de prioridades incorretos!");
-                        break;
-                    }
-                }if(l.get(i + 1).equals("]")){
-                    l.remove(i + 1);
+                        return("1 - Erro de sintaxe encontrado. Pares de definição de prioridades incorretos!");
+                    }  
+                }else if(l.get(i).equals("]")){
+                    //l.remove(i + 1);
                     String b = p.pop();
                     String op = p.pop();
                     String a = p.pop();
@@ -71,11 +72,10 @@ public class Calculadora {
                             tam_max = p.size();
                         }
                     }else{
-                        System.out.println("2 - Erro de sintaxe encontrado. Pares de definição de prioridades incorretos!");
-                        break;
+                       return("2 - Erro de sintaxe encontrado. Pares de definição de prioridades incorretos!");
                     } 
-                }if (l.get(i + 1).equals("}")){
-                    l.remove(i + 1);
+                }else if(l.get(i).equals("}")){
+                    //l.remove(i + 1);
                     String b = p.pop();
                     String op = p.pop();
                     String a = p.pop();
@@ -90,16 +90,18 @@ public class Calculadora {
                             tam_max = p.size();
                         }
                     }else{
-                        System.out.println("3 - Erro de sintaxe encontrado. Pares de definição de prioridades incorretos!");
-                        break;
+                        return ("3 - Erro de sintaxe encontrado. Pares de definição de prioridades incorretos!");
                     }
                 }
             }
-            String resultado2 = ("Resposta: " + p.top());
-            String resultado3 = (" Tamanho máximo da pilha: " + tam_max);
+        
+            if(p.size() == 1){
+                String resultado2 = ("Resposta: " + p.top());
+                String resultado3 = (" Tamanho máximo da pilha: " + tam_max);
+                return (resultado2 + resultado3);
+            }
 
-        return (resultado2 + resultado3);
-             
-    }
+            return (String.valueOf((p.size())));
+        }
 }
 
