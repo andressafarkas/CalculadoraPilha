@@ -21,20 +21,17 @@ public class LeituraArqJava {
             int cont = 1;
             while( (line = reader.readLine()) != null) {
                 ArrayList l = new ArrayList<>();
-                System.out.println("Expressão " + cont);
+                System.out.println("\nExpressão " + cont);
                 String v[] = line.split(" "); // divide a string pelo espaco em branco
                 for(String s : v) {
-                    //System.out.println(s);  
                     l.add(s);
                 }    
                 System.out.println(c.Calcula(l));
                 cont ++;
             }
-            
             reader.close();
         } catch (IOException e) {
             System.err.format("Erro na leitura do arquivo: ", e);
-        }        
-        
+        }         
     }
 }
