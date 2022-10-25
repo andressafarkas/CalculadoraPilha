@@ -3,7 +3,7 @@ import java.util.ArrayList;
 public class Calculadora {
 
     // Realiza os cálculos das operações
-    public double Res_parcial(double a, double b, String operacao){
+    public double ResParcial(double a, double b, String operacao){
         double res = 0;
         if(operacao.equals("+")){
             res = a + b;
@@ -15,8 +15,6 @@ public class Calculadora {
             res = a / b;
         }else if(operacao.equals("^")){
             res = Math.pow(a, b);
-        }else{
-            System.out.println("Erro de Sintaxe encontrado. Expressão lógica não encontrada!");
         }
         return res;
     }
@@ -50,11 +48,13 @@ public class Calculadora {
                 String a = p.pop();
                 if(!IsNumber(b, a)){ // chama o método para validar se os operandos estão corretos
                     return ("Erro de sintaxe encontrado! Existem operadores para os quais não foram encontrados operandos.");
+                }else if(!(operacao.equals("+")) && (operacao.equals("-")) && (operacao.equals("*")) && (operacao.equals("/")) && (operacao.equals("^"))){
+                    return("Erro de Sintaxe encontrado. Erro de operador!");
                 }else if(p.top().equals("(")){ // compara o caracter de abre com o fecha
                     p.pop();  // remove o caracter de abre
                     operandoB =  Double.parseDouble(b); // converte o operando pra numero
                     operandoA = Double.parseDouble(a);
-                    resposta = Res_parcial(operandoA, operandoB, operacao); // faz o calculo
+                    resposta = ResParcial(operandoA, operandoB, operacao); // faz o calculo
                     p.push(Double.toString(resposta)); // adiciona a resposta na pilha
                     if(tam_max < p.size()){ // atualiza o tamanho maximo da pilha
                         tam_max = p.size();
@@ -68,11 +68,13 @@ public class Calculadora {
                 String a = p.pop();
                 if(!IsNumber(b, a)){ // chama o método para validar se os operandos estão corretos
                     return ("Erro de sintaxe encontrado! Existem operadores para os quais não foram encontrados operandos.");
+                }else if(!(operacao.equals("+")) && (operacao.equals("-")) && (operacao.equals("*")) && (operacao.equals("/")) && (operacao.equals("^"))){
+                    return("Erro de Sintaxe encontrado. Erro de operador!");
                 }else if(p.top().equals("[")){ // compara o caracter de abre com o fecha
                     p.pop();  // remove o caracter de abre
                     operandoB =  Double.parseDouble(b);  // converte o operando pra numero
                     operandoA = Double.parseDouble(a);
-                    resposta = Res_parcial(operandoA, operandoB, operacao); // faz o calculo
+                    resposta = ResParcial(operandoA, operandoB, operacao); // faz o calculo
                     p.push(Double.toString(resposta)); // adiciona a resposta na pilha
                     if(tam_max < p.size()){ // atualiza o tamanho maximo da pilha
                         tam_max = p.size();
@@ -86,17 +88,19 @@ public class Calculadora {
                 String a = p.pop();
                 if(!IsNumber(b, a)){ // chama o método para validar se os operandos estão corretos
                     return ("Erro de sintaxe encontrado! Existem operadores para os quais não foram encontrados operandos.");
+                }else if(!(operacao.equals("+")) && (operacao.equals("-")) && (operacao.equals("*")) && (operacao.equals("/")) && (operacao.equals("^"))){
+                    return("Erro de Sintaxe encontrado. Erro de operador!");
                 }else if(p.top().equals("{")){ // compara o caracter de abre com o fecha
                     p.pop();  // remove o caracter de abre 
                     operandoB =  Double.parseDouble(b); // converte o operando pra numero
                     operandoA = Double.parseDouble(a);
-                    resposta = Res_parcial(operandoA, operandoB, operacao);  // faz o calculo
+                    resposta = ResParcial(operandoA, operandoB, operacao);  // faz o calculo
                     p.push(Double.toString(resposta)); // adiciona a resposta na pilha
                     if(tam_max < p.size()){ // atualiza o tamanho maximo da pilha
                         tam_max = p.size();
                     }
                 }else{
-                    return ("Expressão não encontrada!");
+                    return ("Expressão Inválida!");
                 }
             }
         }
